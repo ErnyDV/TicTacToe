@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tic Tac Toe</title>
+    <script defer src="js/objects.js"></script>
+    <script defer src="js/game.js"></script>
+    <link rel="stylesheet" href="styles/style.css">
+</head>
+<body>
+    <div class="container">
+        <div class="game-title-container">
+            <h1 id="game-title">Tic Tac Toe</h1>
+        </div>
+
+        <div class="player-container">
+            <div id="player1" class="player-card">
+                <div class="line-left"></div>
+                <div class="line-right"></div>
+                <h1 id="player-title">Player 1</h1>
+                <div class="player-option">
+                    <p class="options-title">Player Type</p>
+                    <div id="p1playertype-options" class="option-group">
+                        <a  id="human-option" class="option" href="#"><img class="option-icon" src="icons/human.svg" alt=""></a>
+                        <a id="bot-option" class="option" href="#"><img class="option-icon" src="icons/bot.svg" alt=""></a>
+                    </div>
+                </div>
+                <div class="player-option" id="mark-option">
+                    <p class="options-title">Mark Type</p>
+                    <div id="p1marktype-options" class=" option-group">
+                        <a id="x-option" class="option" href="#"><p class="option-icon txt">X</p></a>
+                        <a id="o-option" class="option"  href="#"><p class="option-icon txt">O</p></a>
+                    </div>
+                </div>
+                <div class="player-name-box">
+                    <p class="options-title">Name</p>
+                    <input id="player1name"  class="name-input" type="text">
+                </div>
+
+                <a id="player1ready"  class="ready-button" href="">Ready</a>
+            </div>
+
+            <div id="player2" class="player-card">
+                <div class="line-left"></div>
+                <div class="line-right"></div>
+                <h1 id="player-title">Player 2</h1>
+                <div class="player-option">
+                    <p class="options-title">Player Type</p>
+                    <div id="p2playertype-options" class="option-group">
+                        <a id="human-option" class="option" href="#"><img class="option-icon" src="icons/human.svg" alt=""></a>
+                        <a id="bot-option" class="option" href="#"><img class="option-icon" src="icons/bot.svg" alt=""></a>
+                    </div>
+                </div>
+                <div class="player-option" id="mark-option">
+                    <p class="options-title">Mark Type</p>
+                    <div id="p2marktype-options" class="option-group">
+                        <a id="x-option" class="option" href="#"><p class="option-icon txt">X</p></a>
+                        <a id="o-option" class="option"  href="#"><p class="option-icon txt">O</p></a>
+                    </div>
+                </div>
+                <div class="player-name-box">
+                    <p class="options-title">Name</p>
+                    <input id="player2name"  class="name-input" type="text">
+                </div>
+
+                <a id="player2ready" class="ready-button" href="">Ready</a>
+            </div>
+        </div>
+        <button id="start-game">Start Game</button>
+
+    </div>
+</body>
+</html>
