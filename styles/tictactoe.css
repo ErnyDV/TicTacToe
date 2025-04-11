@@ -1,0 +1,55 @@
+.tictactoe-container{
+    display: none;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    height: 100%;
+    width: 70%;
+    gap: 10px;
+}
+
+#tictactoe{
+    display: grid;
+
+    min-height: max-content;
+    min-width: max-content;
+    height: 80%;
+    width: 60%;
+
+    justify-content: center;
+    border: white solid 1rem;
+    grid-template-columns: repeat(3, minmax(20vh,1fr));
+    grid-template-rows: repeat(3, minmax(20vh,1fr));
+}
+
+.cell{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    cursor: pointer;
+    min-height: 50px;
+    min-width: 50px;
+}
+
+
+#cell-1, #cell-2, #cell-3,#cell-4, #cell-5,#cell-6{
+    border-bottom:black solid 1rem;
+}
+
+#cell-1,#cell-4,#cell-7{
+    border-right: black solid 1rem;
+}
+
+#cell-3, #cell-6, #cell-9{
+    border-left: black solid 1rem;
+}
+
+#tictactoe-message{
+    font-size: calc(5vh + 1.2rem);
+}
+
+.player-mark{
+    color: rgb(0, 0, 0);
+    font-size: 15vh;
+}

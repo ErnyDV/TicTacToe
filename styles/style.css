@@ -41,11 +41,12 @@ body{
     text-align: center;
 
     width: 70%;
-    height: 90px;
+    height: 14vh;
     border-radius: 6px;
 
     background-color: #FD7070;
     color: #fefefe;
+
 }
 
 .game-title-container::after{
@@ -65,8 +66,8 @@ body{
 }
 
 #game-title{
-    font-size: 4.8rem;
-    padding: 20px;
+    font-size: calc(3vw + 2rem);
+    padding: 2vh;
 
 }
 
@@ -217,7 +218,7 @@ a:link{
 }
 
 #start-game{
-    display: block;
+    display: none;
     position: absolute;
     border: none;
     background-color: #5FB361;
@@ -227,4 +228,7 @@ a:link{
     padding: 5px 15px;
     border-radius: 4px;
     bottom: 15px;
+
+    cursor: pointer;
 }
+

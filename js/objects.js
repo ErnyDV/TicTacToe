@@ -3,8 +3,16 @@ const gameBoard = (function(){
     const board = [0,0,0,0,0,0,0,0,0]
 
     const updateBoard = (choice, player) => {
+        console.log(choice)
+        console.log(player)
+        if (player.toUpperCase() === 'X'){
+            player = 1
+        }else{
+            player = 2
+        }
+
         if(choice > 9 || choice < 1){
-            return 'Invalid choice'
+            return `Invalid choice ${choice}` 
         }
         
 
@@ -18,7 +26,7 @@ const gameBoard = (function(){
 
         board[choice - 1] = player;
 
-        return 'Board updated'
+        return true
     }
     
     const displayBoard = () => {
@@ -42,40 +50,61 @@ const gameBoard = (function(){
 
 
 const game = (function(){
-
+    const players = []
+    let playerTurn;
+    let togglePlayer = true;
 
     const checkWinner = (board) => {
         //Row Check
         for(let i = 0; i < 6; i += 3){
-            if(board[i] === 1 && board[i + 1] === 1 && board[i + 2] === 1) return `Row ${i + 1} user 1 win`
+            if(board[i] === 1 && board[i + 1] === 1 && board[i + 2] === 1) return `Row ${i + 1}`
             
-            if(board[i] === 2 && board[i + 1] === 2 && board[i + 2] === 2) return `Row ${i + 1} user 2 win`
+            if(board[i] === 2 && board[i + 1] === 2 && board[i + 2] === 2) return `Row ${i + 1}`
         }
         //Column check
         for(let i = 0; i < 3; i++){
-            if(board[i] === 1 && board[i + 3] === 1 && board[i + 6] === 1) return `Column ${i + 1} user 1 win`
+            if(board[i] === 1 && board[i + 3] === 1 && board[i + 6] === 1) return `Column ${i + 1}`
     
-            if(board[i] === 2 && board[i + 3] === 2 && board[i + 6] === 2) return `Column ${i + 1} user 2 win`
+            if(board[i] === 2 && board[i + 3] === 2 && board[i + 6] === 2) return `Column ${i + 1}`
         }
 
         //Diagonal check
-        if(board[0] === 1 && board[4] === 1 && board[8] === 1) return `Diagonal left to right user 1 win`
-        if(board[0] === 2 && board[4] === 2 && board[8] === 2) return `Diagonal left to right user 2 win`
+        if(board[0] === 1 && board[4] === 1 && board[8] === 1) return `Diagonal left to right`
+        if(board[0] === 2 && board[4] === 2 && board[8] === 2) return `Diagonal left to right`
 
-        if(board[2] === 1 && board[4] === 1 && board[6] === 1) return `Diagonal right to left user 1 win`
-        if(board[2] === 2 && board[4] === 2 && board[6] === 2) return `Diagonal right to left user 2 win`
+        if(board[2] === 1 && board[4] === 1 && board[6] === 1) return `Diagonal right to left`
+        if(board[2] === 2 && board[4] === 2 && board[6] === 2) return `Diagonal right to left`
 
         if(board.includes(0)){
-            return 'Game still in progress'
+            return false
         }else{
             return 'Tie'
         }
     }
 
-    return {checkWinner}
+    function changePlayer(){
+        console.log(players)
+        if (!togglePlayer){
+            togglePlayer = !togglePlayer
+            this.playerTurn = players[0]
+        }else{
+            togglePlayer = !togglePlayer
+            this.playerTurn = players[1]
+        }
+    }
+
+    function importPlayer(player){
+        console.log(player)
+        this.players.push(player)
+        console.log(players)
+    }
+
+    return {playerTurn, players ,checkWinner, importPlayer, changePlayer}
 })()
 
 const gameDom = (function(){
+    const playerTurnEl = document.querySelector('#tictactoe-message');
+
     const assignClickEvents = function(element){
         if(element?.type === 'optionGroup'){
             element.src.forEach((option) => {
@@ -87,7 +116,43 @@ const gameDom = (function(){
         
         if(element?.type === 'readyButton'){
             element.src.addEventListener('click', () => {
+                document.querySelector("#player-container").style.display = 'none'
+                document.querySelector('#tictactoe-container').style.display = 'flex'
+            })
+        }
 
+        if(element?.type === 'cell'){
+            element.src.addEventListener('click', (event) =>{
+                event.stopPropagation()
+                let playerChoice;
+
+                if (event.target.classList.contains('player-mark')){
+                   playerChoice = event.target.parentElement.ariaLabel
+                }else{
+                    playerChoice = event.target.ariaLabel
+                }
+                let isBoardUpdated = gameBoard.updateBoard(playerChoice, game.playerTurn.mark)
+
+
+                if(typeof isBoardUpdated === typeof '') return
+                event.target.innerHTML = `<p class="player-mark">${game.playerTurn.mark}</p>`
+                if(typeof game.checkWinner(gameBoard.board) === typeof '') {
+                    console.log('hello')
+                    this.updatePlayerTurnEl(`Player ${game.playerTurn.name} wins! ${game.checkWinner(gameBoard.board)}`)
+
+                    let eventChildren = [...event.target.parentElement.children]
+                    eventChildren.forEach((el) => {
+                        console.log(el)
+                        el.replaceWith(el.cloneNode(true))
+                    })
+                    return
+                }
+                this.updatePlayerTurnEl()
+                game.changePlayer()     
+
+                
+                console.log(event.target.parentElement.children)
+              
             })
         }
     }
@@ -109,15 +174,13 @@ const gameDom = (function(){
     }
 
     const formError = (playerType, markType, name) => {
-        console.log(playerType)
-        console.log(markType)
-        
+
         if(!playerType[0] || !playerType[1] || !markType[0] || !markType[1] || !name){ 
             console.log('Button Missing')
             return true
         }
 
-        if (!playerType[0]?.classList?.contains('option-selected')&& !playerType[1]?.classList?.contains('option-selected')){
+        if (!playerType[0]?.classList?.contains('option-selected') && !playerType[1]?.classList?.contains('option-selected')){
             console.log('Missing player type')
             return true
         }
@@ -131,7 +194,7 @@ const gameDom = (function(){
             console.log('Missing name')
             return true
         }
-
+        
         return false
     }
 
@@ -148,7 +211,6 @@ const gameDom = (function(){
     const readyUp = (button, formError) => {
         if(!button) return 'Button missing'
         if (formError){
-            console.log('hello')
             document.querySelector(button).style.backgroundColor = '#B85D51'
             return
         }
@@ -166,15 +228,28 @@ const gameDom = (function(){
         }
     }
 
-    return {assignClickEvents, optionSelection, formError, checkReadyStatus,readyUp, enableStartButton}
+    const updatePlayerTurnEl = function(optionalMessage){
+        if(optionalMessage){
+            playerTurnEl.textContent = optionalMessage;
+            return
+        }
+
+       playerTurnEl.textContent = `Player ${game.playerTurn.name}'s turn`;
+    }
+
+    return {updatePlayerTurnEl, assignClickEvents, optionSelection, formError, checkReadyStatus,readyUp, enableStartButton}
 })()
 
-function player(name, mark){
+function player(name, mark, playerType){
     if (typeof name !== typeof '') return 'Name must be a string';
     
     if (typeof mark !== typeof '') return 'Mark must be a string';
 
+    if (typeof playerType !== typeof '') return 'Playertype must be a string'
+
+    if (playerType.toUpperCase() !== 'HUMAN' && playerType.toUpperCase() !== 'BOT') return `Invalid player type in player creation ${playerType}`
+
     if (mark.toUpperCase() !== 'X' && mark.toUpperCase() !== 'O') return `Invalid mark type in player creation: ${mark}`
 
-    return {name, mark: mark.toUpperCase()}
+    return {name, mark: mark.toUpperCase(), playerType}
 }
